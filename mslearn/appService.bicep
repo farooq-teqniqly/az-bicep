@@ -90,3 +90,5 @@ resource appServiceSecrets 'Microsoft.KeyVault/vaults/secrets@2020-04-01-preview
     value: 'https://${appServiceApp.properties.defaultHostName}/'
   }
 }
+
+output endpoint string = 'https://${appServiceApp.properties.defaultHostName}/'

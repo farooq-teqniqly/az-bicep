@@ -21,3 +21,5 @@ module appServiceDeploy 'appService.bicep' = {
      objectId: objectId
   }
 }
+
+output appServiceEndpoint string = appServiceDeploy.outputs.endpoint
