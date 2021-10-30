@@ -53,6 +53,7 @@ resource appServiceKeyVault 'Microsoft.KeyVault/vaults@2020-04-01-preview' = {
               'get'
               'list'
               'set'
+              'delete'
             ]
           }
        }
@@ -76,5 +77,16 @@ resource appServiceApp 'Microsoft.Web/sites@2020-06-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     httpsOnly: true
+  }
+}
+
+resource appServiceSecrets 'Microsoft.KeyVault/vaults/secrets@2020-04-01-preview' = {
+  dependsOn: [
+    appServiceApp
+  ]
+  parent: appServiceKeyVault
+  name: 'endpoint'
+  properties: {
+    value: 'https://${appServiceApp.properties.defaultHostName}/'
   }
 }
