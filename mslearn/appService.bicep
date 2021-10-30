@@ -22,11 +22,43 @@ param appServicePlanSku object = {
   tier: 'Free'
 }
 
+@description('The object id that will be granted key vault access.')
+param objectId string
+
+
+
 @description('The Azure region into which the resources should be deployed.')
 param location string = resourceGroup().location
 
 var appServicePlanName = '${environmentName}-${solutionName}-plan'
 var appServiceAppName = '${environmentName}-${solutionName}-app'
+var keyVaultName = '${environmentName}-${solutionName}-kv'
+
+resource appServiceKeyVault 'Microsoft.KeyVault/vaults@2020-04-01-preview' = {
+  name: keyVaultName
+  location: location
+  properties: {
+     sku: {
+      family: 'A'
+      name: 'standard'
+     }
+     tenantId: subscription().tenantId
+     enabledForDeployment: true
+     accessPolicies: [
+       {
+          objectId: objectId
+          tenantId: subscription().tenantId
+          permissions: {
+            secrets: [
+              'get'
+              'list'
+              'set'
+            ]
+          }
+       }
+     ]
+  }
+}
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appServicePlanName

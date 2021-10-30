@@ -8,6 +8,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2020-06-01' = {
 param environmentName string
 param appServicePlanInstanceCount int
 param appServicePlanSku object
+param objectId string
 
 module appServiceDeploy 'appService.bicep' = {
   name: 'appServiceDeploy'
@@ -17,5 +18,6 @@ module appServiceDeploy 'appService.bicep' = {
      solutionName: 'fm-solution-01'
      appServicePlanInstanceCount: appServicePlanInstanceCount
      appServicePlanSku: appServicePlanSku
+     objectId: objectId
   }
 }
